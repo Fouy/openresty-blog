@@ -1,1 +1,2 @@
-*.html linguist=Lua
+*.html linguist-language=Lua
+origin/master
