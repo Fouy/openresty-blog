@@ -19,14 +19,18 @@ function _M:save( article_entity )
 	local sql = "insert into article(`type_id`, `tag_id`, `title`, `content`, `create_date`, `source`, `create_time`, `modify_time`) " 
 			.. " values (%s, %s, %s, %s, now(), %s, now(), now() )"
 	sql = string.format(sql, article_entity['type'], article_entity['tag'], article_entity['title'], article_entity['content'], article_entity['source'])
+	-- 刷新文章总数
+	local updatesql = "update article_type set count = count + 1 where type_id = %s"
+	updatesql = string.format(updatesql, article_entity['type'])
 
 	db:query("SET NAMES utf8")
-	local res, err, errno, sqlstate = db:query(sql)
+	local res, err, errno, sqlstate = db:query(sql .. ' ; ' .. updatesql .. ' ; ')
 	db:close()
 	if not res then
 		ngx.say(err)
 		return {}
 	end
+
 end
 
 -- 更新文章
