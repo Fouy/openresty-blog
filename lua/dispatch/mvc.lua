@@ -3,7 +3,7 @@ local uri = ngx.var.uri
 
 -- 如果是首页
 if uri == "" or uri == "/" then
-    local res = ngx.location.capture("/index.html", {})
+    local res = ngx.location.capture("/article", {})
     ngx.say(res.body)
     return
 end
