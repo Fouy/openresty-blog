@@ -76,7 +76,7 @@ function _M:list( args )
 	
 	-- ngx.log(ngx.ERR, '>>>>>>>>>>>>>>>>>>>>>' .. sql .. '\n')
 
-	sql = sql .. "limit %d, %d"
+	sql = sql .. " order by create_time desc limit %d, %d "
 	sql = string.format(sql, start, pageSize)
 
 	db:query("SET NAMES utf8")
