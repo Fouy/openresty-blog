@@ -3,6 +3,7 @@ local req = require "dispatch.req"
 local result = require "common.result"
 local article_service = require "service.article_service"
 local article_type_service = require "service.article_type_service"
+local common_service = require "service.common_service"
 local template = require("resty.template")
 
 local _M = {}
@@ -12,8 +13,6 @@ function _M:editor()
 	local args = req.getArgs()
 	local articleId = args["articleId"]
 	local context = {}
-
-	-- ngx.log(ngx.ERR, ">>>>>>>>>>>>>>>" .. articleId .. '\n')
 
 	if articleId ~= nil and articleId ~= "" then
 		local entity = article_service:detail(articleId)
@@ -34,10 +33,14 @@ function _M:save()
 	local content = args["content"]
 	local articleId = args["articleId"]
 	local token = args["token"]
+	local hot = args["hot"]
 
-	-- ngx.log(ngx.ERR, ">>>>>>>>>>>>>" .. token)
 	if token == nil or token ~= "340323" then
 		ngx.say(cjson.encode(result:error("口令错误")))
+		return 
+	end
+	if hot == nil or hot == "" then
+		ngx.say(cjson.encode(result:error("热门错误")))
 		return 
 	end
 	if title == nil or title == "" then
@@ -83,7 +86,8 @@ function _M:index()
 	local typeList = article_type_service:list()
 	local context = {list = list, pageNo = tonumber(args["pageNo"])+1, typeList = typeList }
 	
-	ngx.header["Content-Type"] = 'text/html;charset=UTF-8'
+	-- 增加热门文章数据
+	context["hotList"] = common_service:hotList()
 	template.render("blog/index.html", context)
 
 end
@@ -110,7 +114,8 @@ function _M:category()
 	local typeEntity = article_type_service:detail(typeId)
 	local context = {list = list, pageNo = tonumber(args["pageNo"])+1, typeEntity = typeEntity }
 	
-	ngx.header["Content-Type"] = 'text/html;charset=UTF-8'
+	-- 增加热门文章数据
+	context["hotList"] = common_service:hotList()
 	template.render("blog/category.html", context)
 
 end
@@ -135,6 +140,8 @@ function _M:search()
 	local list = article_service:list(args)
 	local context = {list = list, pageNo = tonumber(args["pageNo"])+1, keyword = args["keyword"] }
 	
+	-- 增加热门文章数据
+	context["hotList"] = common_service:hotList()
 	template.render("blog/search.html", context)
 
 end
@@ -153,7 +160,10 @@ function _M:detail()
 	local entity = article_service:detail(articleId)
 	local context = {entity = entity}
 
-	ngx.header["Content-Type"] = 'text/html;charset=UTF-8'
+	-- 增加热门文章数据
+	context["hotList"] = common_service:hotList()
+	-- 增加推荐文章数据
+	context["relaList"] = common_service:relaList(entity["type_id"])
 	template.render("blog/article.html", context)
 
 end

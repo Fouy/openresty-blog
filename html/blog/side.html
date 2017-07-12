@@ -53,20 +53,21 @@
   <div class="widget widget_hot">
     <h3>热门文章</h3>
     <ul>
-      <li>
-        <a href="">
-          <span class="text">php如何判断一个日期的格式是否正确</span>
-          <span class="muted"><i class="glyphicon glyphicon-time"></i> 2016-1-4 </span>
-          <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
-        </a>
-      </li>
-      <li>
-        <a href="">
-          <span class="text">php如何判断一个日期的格式是否正确</span>
-          <span class="muted"><i class="glyphicon glyphicon-time"></i> 2016-1-4 </span>
-          <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> 120</span>
-        </a>
-      </li>
+      {% if hotList ~= nil then %}
+        {% for i, v in ipairs(hotList) do %}  
+        <li>
+          <a href="/article/detail?articleId={* v.article_id *}" target="_blank">
+            <span class="text">{* v.title *}</span>
+            <span class="muted"><i class="glyphicon glyphicon-time"></i> {* v.create_time *}</span>
+            <span class="muted"><i class="glyphicon glyphicon-eye-open"></i> {* v.view_count *}</span>
+          </a>
+        </li>
+        {% end %}
+      {% else %}
+        <li>
+          <span class="text" style="margin: 15px;">暂无内容</span>
+        </li>
+      {% end %}
 
     </ul>
   </div>

@@ -66,10 +66,19 @@
           <h3>相关推荐</h3>
         </div>
         <ul>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
-          <li><a href="article.html">php如何判断一个日期的格式是否正确</a></li>
+
+        {% if relaList ~= nil then %}
+          {% for i, v in ipairs(relaList) do %}  
+          <li>
+            <a href="/article/detail?articleId={* v.article_id *}" target="_blank" >{* v.title *}</a>
+          </li>
+          {% end %}
+        {% else %}
+          <li>
+            <span class="text" style="margin: 15px;">暂无内容</span>
+          </li>
+        {% end %}
+
         </ul>
       </div>
       

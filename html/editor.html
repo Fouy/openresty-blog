@@ -16,6 +16,11 @@
 标签：
 <select id="tag" name="tag">
 </select><br/>
+热门：
+<select id="hot" name="hot">
+	<option value="0">否</option>
+	<option value="1">是</option>
+</select><br/>
 标题：<input type="text" name="title" id="title" value="{% if entity ~= nil then %}{* entity.title *}{% end %}" /><br/>
 来源：<input type="text" name="source" id="source" value="{% if entity ~= nil then %}{* entity.source *}{% end %}" /><br/>
 <textarea id="TextArea1" class="ckeditor">{% if entity ~= nil then %}{* entity.content *}{% end %}</textarea>
@@ -77,6 +82,7 @@
 			var content = editor.document.getBody().getHtml();
 			var data = {};
 			data.token = $('#token').val();
+			data.hot = $('#hot').val();
 			data.articleId = $('#articleId').val();
 			data.type = $('#type').val();
 			data.tag = $('#tag').val();

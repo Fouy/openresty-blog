@@ -14,11 +14,12 @@ function _M:save( article_entity )
 	article_entity['title'] = ngx.quote_sql_str(article_entity['title'])
 	article_entity['source'] = ngx.quote_sql_str(article_entity['source'])
 	article_entity['content'] = ngx.quote_sql_str(article_entity['content'])
+	article_entity['hot'] = ngx.quote_sql_str(article_entity['hot'])
 
 	local db = mysql:new()
-	local sql = "insert into article(`type_id`, `tag_id`, `title`, `content`, `create_date`, `source`, `create_time`, `modify_time`) " 
-			.. " values (%s, %s, %s, %s, now(), %s, now(), now() )"
-	sql = string.format(sql, article_entity['type'], article_entity['tag'], article_entity['title'], article_entity['content'], article_entity['source'])
+	local sql = "insert into article(`type_id`, `tag_id`, `title`, `content`, `create_date`, `source`, `hot`, `create_time`, `modify_time`) " 
+			.. " values (%s, %s, %s, %s, now(), %s, %s, now(), now() )"
+	sql = string.format(sql, article_entity['type'], article_entity['tag'], article_entity['title'], article_entity['content'], article_entity['source'], article_entity['hot'])
 	-- 刷新文章总数
 	local updatesql = "update article_type set count = count + 1 where type_id = %s"
 	updatesql = string.format(updatesql, article_entity['type'])
@@ -43,9 +44,9 @@ function _M:update( article_entity )
 	local articleId = tonumber(article_entity["articleId"])
 
 	local db = mysql:new()
-	local sql = "update article set `type_id`=%s, `tag_id`=%s, `title`=%s, `content`=%s, `source`=%s, `modify_time`=now() " 
+	local sql = "update article set `type_id`=%s, `tag_id`=%s, `title`=%s, `content`=%s, `source`=%s, `hot`=%s, `modify_time`=now() " 
 			.. " where article_id = %d"
-	sql = string.format(sql, article_entity['type'], article_entity['tag'], article_entity['title'], article_entity['content'], article_entity['source'], articleId)
+	sql = string.format(sql, article_entity['type'], article_entity['tag'], article_entity['title'], article_entity['content'], article_entity['source'], article_entity['hot'], articleId)
 
 	db:query("SET NAMES utf8")
 	local res, err, errno, sqlstate = db:query(sql)
