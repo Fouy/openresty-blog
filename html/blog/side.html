@@ -45,10 +45,28 @@
   <div class="widget widget_sentence">
     <h3>每日一句</h3>
     <div class="widget-sentence-content">
-      <h4>2017年07月10日 星期一</h4>
+      <h4 id="currentTime">2017年07月10日 星期一</h4>
       <p>人得先清心寡欲，方能高枕无忧。</p>
     </div>
   </div>
+
+  <script type="text/javascript">
+    (function(){
+
+      var show_day = new Array('星期一','星期二','星期三','星期四','星期五','星期六','星期日'); 
+      var time = new Date();
+      var year = time.getFullYear();
+      var month = time.getMonth();
+      var date = time.getDate();
+      var day = time.getDay();
+
+      month = Number(month) + 1; 
+
+      var currentTime = year+'年'+month+'月'+date+'日'+' '+show_day[day-1];
+      $("#currentTime").html(currentTime);
+
+    })();
+  </script>
 
   <div class="widget widget_hot">
     <h3>热门文章</h3>
